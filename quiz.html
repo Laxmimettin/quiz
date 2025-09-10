@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #53265a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        label {
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h2 id="question">Question text</h2>
+        <ul>
+            <li>
+                <input type="radio" name="answer" id="a" class="answer">
+                <label for="a" id="a_text">Answer A</label>
+            </li>
+            <li>
+                <input type="radio" name="answer" id="b" class="answer">
+                <label for="b" id="b_text">Answer B</label>
+            </li>
+            <li>
+                <input type="radio" name="answer" id="c" class="answer">
+                <label for="c" id="c_text">Answer C</label>
+            </li>
+            <li>
+                <input type="radio" name="answer" id="d" class="answer">
+                <label for="d" id="d_text">Answer D</label>
+            </li>
+        </ul>
+        <button id="submit">Submit</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What does HTML stand for?",
+                a: "Hyper Text Markup Language",
+                b: "Home Tool Markup Language",
+                c: "Hyperlinks and Text Markup Language",
+                d: "Hyperlinking Text Management Language",
+                correct: "a"
+            },
+            {
+                question: "Which language is used for styling web pages?",
+                a: "HTML",
+                b: "JQuery",
+                c: "CSS",
+                d: "XML",
+                correct: "c"
+            },
+            {
+                question: "Which is not a JavaScript framework?",
+                a: "React",
+                b: "Angular",
+                c: "Vue",
+                d: "Django",
+                correct: "d"
+            },
+            {
+                question: "Inside which HTML element do we put the JavaScript?",
+                a: "<js>",
+                b: "<script>",
+                c: "<javascript>",
+                d: "<code>",
+                correct: "b"
+            }
+        ];
+
+        const questionEl = document.getElementById('question');
+        const answersEls = document.querySelectorAll('.answer');
+        const a_text = document.getElementById('a_text');
+        const b_text = document.getElementById('b_text');
+        const c_text = document.getElementById('c_text');
+        const d_text = document.getElementById('d_text');
+        const submitBtn = document.getElementById('submit');
+        const resultEl = document.getElementById('result');
+
+        let currentQuiz = 0;
+        let score = 0;
+
+        loadQuiz();
+
+        function loadQuiz() {
+            deselectAnswers();
+            const currentQuizData = quizData[currentQuiz];
+            questionEl.innerText = currentQuizData.question;
+            a_text.innerText = currentQuizData.a;
+            b_text.innerText = currentQuizData.b;
+            c_text.innerText = currentQuizData.c;
+            d_text.innerText = currentQuizData.d;
+        }
+
+        function deselectAnswers() {
+            answersEls.forEach(answerEl => answerEl.checked = false);
+        }
+
+        function getSelected() {
+            let answer;
+            answersEls.forEach(answerEl => {
+                if (answerEl.checked) {
+                    answer = answerEl.id;
+                }
+            });
+            return answer;
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const answer = getSelected();
+            if (answer) {
+                if (answer === quizData[currentQuiz].correct) {
+                    score++;
+                }
+                currentQuiz++;
+                if (currentQuiz < quizData.length) {
+                    loadQuiz();
+                } else {
+                    resultEl.innerHTML = `✅ You scored ${score} / ${quizData.length}`;
+                    submitBtn.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
